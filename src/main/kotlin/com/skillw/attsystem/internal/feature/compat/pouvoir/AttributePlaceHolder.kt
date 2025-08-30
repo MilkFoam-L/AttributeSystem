@@ -3,6 +3,7 @@ package com.skillw.attsystem.internal.feature.compat.pouvoir
 import com.skillw.attsystem.AttributeSystem
 import com.skillw.attsystem.AttributeSystem.attributeManager
 import com.skillw.attsystem.AttributeSystem.compiledAttrDataManager
+import com.skillw.attsystem.AttributeSystem.decimalFormat
 import com.skillw.attsystem.AttributeSystem.equipmentDataManager
 import com.skillw.attsystem.api.AttrAPI.getAttrData
 import com.skillw.attsystem.api.attribute.Attribute
@@ -20,21 +21,22 @@ object AttributePlaceHolder : PouPlaceHolder("as", AttributeSystem) {
         attribute: Attribute,
         params: List<String>,
     ): String {
-        return when (params.size) {
-            0 ->
-                data.getAttrValue<Any>(attribute)?.toString()
+        // 使用扩展函数的简化版本
+        val number = when (params.size) {
+            0 -> data.getAttrValue<Any>(attribute).toSafeDouble()
+            1 -> data.getAttrValue<Any>(attribute, params[0]).toSafeDouble()
+            2 -> data.getStatus(attribute)?.get(params[1]).toSafeDouble()
+            else -> 0.0
+        }
+        return decimalFormat.format(number)
+    }
 
-            1 -> {
-                data.getAttrValue<Any>(attribute, params[0])?.toString()
-            }
-
-            2 -> {
-                data.getStatus(attribute)?.get(params[1])?.toString()
-            }
-
-            else ->
-                "0.0"
-        } ?: "0.0"
+    // 方案4: 扩展函数方式（最简洁）
+    fun Any?.toSafeDouble(): Double = when (this) {
+        null -> 0.0
+        is Number -> this.toDouble()
+        is String -> this.trim().toDoubleOrNull() ?: 0.0
+        else -> this.toString().toDoubleOrNull() ?: 0.0
     }
 
     fun placeholder(params: String, entity: LivingEntity, attrData: AttributeDataCompound): String {

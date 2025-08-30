@@ -25,6 +25,8 @@ object AttributeSystem : Plugin(), SubPouvoir {
     override val plugin by lazy {
         BukkitPlugin.getInstance()
     }
+    // 定义可重用的格式化实例（注意线程安全，避免多线程共享）
+    val decimalFormat = java.text.DecimalFormat("#0.00")
 
     /** Configs */
 
