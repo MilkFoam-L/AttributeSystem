@@ -43,10 +43,11 @@ repositories {
     mavenCentral()
     maven { url = uri("https://mvn.lumine.io/repository/maven-public/") }
     maven { url = uri("https://jitpack.io") }
+    maven { url = uri("https://maven.devs.beer") }
 }
 
 dependencies {
-    compileOnly("com.github.LoneDev6:API-ItemsAdder:4.0.10")
+    compileOnly("dev.lone:api-itemsadder:4.0.10")
     compileOnly("io.lumine:Mythic-Dist:5.9.5")
     compileOnly("ink.ptms.core:v12104:12104-minimize:mapped")
     compileOnly(fileTree("libs"))
@@ -58,6 +59,6 @@ tasks.withType<JavaCompile> {
 }
 
 configure<JavaPluginConvention> {
-    targetCompatibility = JavaVersion.VERSION_21
-    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_17
 }
